@@ -1,4 +1,4 @@
-package dataModel;
+package org.project.dataModel;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -12,12 +12,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @XmlRootElement
-public class Comments implements Serializable {
+public class Comment implements Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
 
-	public Comments() {
+	public Comment() {
 		super();
 	}
 	
@@ -30,9 +30,9 @@ public class Comments implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar createdTime;
 	@OneToOne(cascade=CascadeType.ALL)
-	private Users author;
+	private User author;
 
-	public Comments(long id, String content, Calendar createdTime, Users author) {
+	public Comment(long id, String content, Calendar createdTime, User author) {
 		super();
 		this.id = id;
 		this.content = content;
@@ -64,11 +64,11 @@ public class Comments implements Serializable {
 		this.createdTime = createdTime;
 	}
 
-	public Users getAuthor() {
+	public User getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(Users author) {
+	public void setAuthor(User author) {
 		this.author = author;
 	}
 	

@@ -1,4 +1,4 @@
-package dataModel;
+package org.project.dataModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,11 +12,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @XmlRootElement
-public class Users implements Serializable {
+@NamedQueries({
+    @NamedQuery(name = "getAllUsers", query = "SELECT b FROM User b")
+})
+public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public Users() {
+	public User() {
 		super();
 	}
 	
@@ -29,10 +32,10 @@ public class Users implements Serializable {
 	private boolean isAdministrator;
 	
 //	@OneToMany(cascade=CascadeType.ALL)
-	private List<Task> tasksWorkingOn;
+	private List<Task> tasks;
 	
 	
-	public Users(String userName, String passwd, String fullName, String email,
+	public User(String userName, String passwd, String fullName, String email,
 			boolean isAdministrator, List<Task> tasksWorkingOn) {
 		super();
 		this.userName = userName;
@@ -40,7 +43,7 @@ public class Users implements Serializable {
 		this.fullName = fullName;
 		this.email = email;
 		this.isAdministrator = isAdministrator;
-		this.tasksWorkingOn = tasksWorkingOn;
+		this.tasks= tasksWorkingOn;
 	}
 
 	public boolean isAdministrator() {
@@ -83,12 +86,12 @@ public class Users implements Serializable {
 		this.email = email;
 	}
 
-	public List<Task> getTasksWorkingOn() {
-		return tasksWorkingOn;
+	public List<Task> getTasks() {
+		return tasks;
 	}
 
-	public void setTasksWorkingOn(List<Task> tasksWorkingOn) {
-		this.tasksWorkingOn = tasksWorkingOn;
+	public void setTasks(List<Task> tasksWorkingOn) {
+		this.tasks = tasksWorkingOn;
 	}
    
 }

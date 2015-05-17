@@ -1,4 +1,4 @@
-package dataModel;
+package org.project.dataModel;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -13,12 +13,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "findByNameExecutor", query = "SELECT b FROM Task b WHERE b.name = :name AND b.executor = :executor"),
+    @NamedQuery(name = "getAllTasks", query = "SELECT b FROM Task b")
+})
 public class Task implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	public Task() {
-		super();
+		//super();
 	}
 	
 	@Id
@@ -33,10 +37,10 @@ public class Task implements Serializable {
 	
 	private String status;
 //	@OneToOne(cascade=CascadeType.ALL)
-	private Users executor;  
+	private String executor;  
 	
 //	@OneToMany(cascade=CascadeType.ALL)
-	private List<Comments> comments;
+	private List<Comment> comments;
 	private boolean isImportant;
 
 	public long getId() {
@@ -79,19 +83,19 @@ public class Task implements Serializable {
 		this.status = status;
 	}
 
-	public Users getExecutor() {
+	public String getExecutor() {
 		return executor;
 	}
 
-	public void setExecutor(Users executor) {
+	public void setExecutor(String executor) {
 		this.executor = executor;
 	}
 
-	public List<Comments> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comments> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 
@@ -104,7 +108,7 @@ public class Task implements Serializable {
 	}
 
 	public Task(long id, String name, String description, Calendar finalDate,
-			String status, Users executor, List<Comments> comments,
+			String status, String executor, List<Comment> comments,
 			boolean isImportant) {
 		super();
 		this.id = id;
