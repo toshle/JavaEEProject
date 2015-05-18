@@ -16,8 +16,9 @@ import org.project.dao.TaskDAO;
 import org.project.dataModel.Comment;
 import org.project.dataModel.Task;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 
 @Path("/Task")
@@ -54,11 +55,12 @@ public class TaskManager {
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 public void changeStatus(String json){
 		 
-		 Gson gson = new Gson();
-		//TO DO
+		 JsonElement element = new JsonParser().parse(json);
+		 JsonObject object = element.getAsJsonObject();
 		 
-		 String id=null;
-		 String status=null;
+		 String id=object.get("id").getAsString();
+		 String status=object.get("status").getAsString();
+		 
 		 TaskDAO dao = new TaskDAO(emf.createEntityManager());
 		 
 		 dao.changeStatus(id, status);
@@ -66,7 +68,7 @@ public class TaskManager {
 	 }
 	 
 	 @POST
-	 @Path("/Comment/{name}")
+	 @Path("/Comment/{id}")
 	 @Consumes(MediaType.APPLICATION_JSON)
 	 public void addComment(Comment comment,@PathParam("id") String id){
 		 

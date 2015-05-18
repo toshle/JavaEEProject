@@ -53,6 +53,7 @@ public class TaskDAO {
 		
 		if(update != null){
 			em.getTransaction().begin();
+			update.setChanged(true);
 			update.setStatus(status);
 			em.getTransaction().commit();
 		}
@@ -65,6 +66,7 @@ public class TaskDAO {
 			return;
 		
 		em.getTransaction().begin();
+		task.setChanged(true);
 		task.getComments().add(comment);
 		em.getTransaction().commit();
 		

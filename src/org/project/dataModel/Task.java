@@ -22,7 +22,6 @@ public class Task implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public Task() {
-		//super();
 	}
 	
 	@Id
@@ -42,6 +41,16 @@ public class Task implements Serializable {
 //	@OneToMany(cascade=CascadeType.ALL)
 	private List<Comment> comments;
 	private boolean isImportant;
+	private boolean isChanged;
+	
+
+	public boolean isChanged() {
+		return isChanged;
+	}
+
+	public void setChanged(boolean isChanged) {
+		this.isChanged = isChanged;
+	}
 
 	public long getId() {
 		return id;
@@ -107,11 +116,10 @@ public class Task implements Serializable {
 		this.isImportant = isImportant;
 	}
 
-	public Task(long id, String name, String description, Calendar finalDate,
+	public Task(String name, String description, Calendar finalDate,
 			String status, String executor, List<Comment> comments,
-			boolean isImportant) {
+			boolean isImportant, boolean isChanged) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.finalDate = finalDate;
@@ -119,6 +127,10 @@ public class Task implements Serializable {
 		this.executor = executor;
 		this.comments = comments;
 		this.isImportant = isImportant;
+		this.isChanged = isChanged;
 	}
+
+
+
    
 }
