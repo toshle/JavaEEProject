@@ -102,8 +102,8 @@ a {
 }
 
 .ui-state-default {
-  background: -webkit-linear-gradient(#fafafa, #d5d5d5);
-  background: -o-linear-gradient(#fafafa, #d5d5d5);
-  background: -moz-linear-gradient(#fafafa, #d5d5d5);
-  background: linear-gradient(#fafafa, #d5d5d5);
+  background: -webkit-linear-gradient(#fafafa, #dfdfdf);
+  background: -o-linear-gradient(#fafafa, #dfdfdf);
+  background: -moz-linear-gradient(#fafafa, #dfdfdf);
+  background: linear-gradient(#fafafa, #dfdfdf);
 }
