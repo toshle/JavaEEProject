@@ -60,7 +60,7 @@ a {
   color: white;*/
 }
 
-#done .ui-state-default a:not(.task-executor>a) {
+#done .ui-state-default a:not(.username-link) {
   text-decoration: line-through;
 }
 
