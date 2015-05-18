@@ -1,10 +1,208 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
-<p>Test</p>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <title>Taskboard-UI</title>
+    <link href="css/style.css" media="all" rel="stylesheet" />
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/taskboard.js"></script>
+  </head>
+  <body>
+    <div id="user-line">
+      <div id="user-info">
+        Hello, <a class="username-link" data-id="1" href="#">Rosen Rachev</a>
+      </div>
+
+      <ul id="menu">
+        <!-- <li>
+          <a id="login-link" href="#">Login</a>
+        </li>
+        <li>
+          <a id="register-link" href="#">Register</a>
+        </li> -->
+        <li>
+          <a id="logout-link" href="#">Logout</a>
+        </li>
+      </ul>
+    </div>
+    <div id="board">
+      <ul id="todo" class="connectedSortable" >
+
+        <li class="section-title">
+          Todo <a id="add-task-link" href="#">+</a>
+        </li>
+        <li data-id="1" class="ui-state-default">
+          <a class="task-title" data-id="1" class="task-title" href="#">Create UI for taskboard</a>
+          <p class="task-description">
+            Характеристиките на една задача са следните: кратко име, описание, финална дата за изпълнение, изпълнител и статус. Статусът може да бъде ‘начален’, ‘в процес’ и ‘изпълнена’. По задачите работят участниците в проекта.
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="2" class="ui-state-default">
+          <a class="task-title" data-id="2" href="#">Create JS logic for taskboard</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="3" class="ui-state-default">
+          <a class="task-title" data-id="3" href="#">Create login/register form</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="4" class="ui-state-default">
+          <a class="task-title" data-id="4" href="#">Create task details page</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="5" class="ui-state-default">
+          <a class="task-title" data-id="5" href="#">Create user details page</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="16" class="ui-state-default">
+          <a class="task-title" data-id="16" href="#">A task that has a very very long name and doesn't fit on a single row.</a>
+          <p class="task-description">
+            Характеристиките на една задача са следните: кратко име, описание, финална дата за изпълнение, изпълнител и статус. Статусът може да бъде ‘начален’, ‘в процес’ и ‘изпълнена’. По задачите работят участниците в проекта.
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+
+      </ul>
+
+      <ul id="inprogress" class="connectedSortable">
+
+        <li class="section-title">In progress</li>
+        <li data-id="6" class="ui-state-default">
+          <a class="task-title" data-id="6" href="#">Dummy 1</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="7" class="ui-state-default">
+          <a class="task-title" data-id="7" href="#">Dummy 2</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="8" class="ui-state-default">
+          <a class="task-title" data-id="8" href="#">Dummy 3</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="9" class="ui-state-default">
+          <a class="task-title" data-id="9" href="#">Dummy 4</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="10" class="ui-state-default">
+          <a class="task-title" data-id="10" href="#">Dummy 5</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="17" class="ui-state-default">
+          <a class="task-title" data-id="17" href="#">Names that can take more than three rows will be cut off so...</a>
+          <p class="task-description">
+            Характеристиките на една задача са следните: кратко име, описание, финална дата за изпълнение, изпълнител и статус. Статусът може да бъде ‘начален’, ‘в процес’ и ‘изпълнена’. По задачите работят участниците в проекта.Характеристиките на една задача са следните: кратко име, описание, финална дата за изпълнение, изпълнител и статус. Статусът може да бъде ‘начален’, ‘в процес’ и ‘изпълнена’. По задачите работят участниците в проекта.
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+
+      </ul>
+
+      <ul id="done" class="connectedSortable">
+
+        <li class="section-title">Done</li>
+        <li data-id="11" class="ui-state-default">
+          <a class="task-title" data-id="11" href="#">Dummy 6</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="12" class="ui-state-default">
+          <a class="task-title" data-id="12" href="#">Dummy 7</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="13" class="ui-state-default">
+          <a class="task-title" data-id="13" href="#">Dummy 8</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="14" class="ui-state-default">
+          <a class="task-title" data-id="14" href="#">Dummy 9</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+        <li data-id="15" class="ui-state-default">
+          <a class="task-title" data-id="15" href="#">Dummy 10</a>
+          <p class="task-description">
+          </p>
+          <p class="task-executor">
+            Deadline: 24-05-2015
+            | Executor: <a class="username-link" href="#">Rosen Rachev</a>
+          </p>
+        </li>
+
+      </ul>
+    </div>
+  </body>
 </html>

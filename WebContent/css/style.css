@@ -1,0 +1,102 @@
+* {
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+body {
+  font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #0073EA;
+  text-decoration: none;
+}
+
+#user-line {
+  /*border: 1px solid red;*/
+  width: 100%;
+  margin: auto;
+  height: 30px;
+}
+
+#user-info {
+  /*border: 1px solid red;*/
+  display: inline-table;
+  float: left;
+  margin: auto;
+  padding: 5px;
+}
+
+#menu {
+/*  border: 1px solid red;*/
+  float: right;
+  margin: auto;
+  padding: 5px;
+  list-style-type: none;
+}
+
+#menu, #menu li {
+  display: inline-table;
+}
+
+#board {
+  width: 100%;
+  margin: auto;
+}
+
+#todo {
+  background-color: #f6f6f6;
+}
+
+#inprogress {
+  background-color: #eeeeee;
+}
+
+#done {
+  background-color: #f6f6f6;
+  /*background-color: #00f000;
+  color: white;*/
+}
+
+#done .ui-state-default a:not(.task-executor>a) {
+  text-decoration: line-through;
+}
+
+.connectedSortable {
+  display: inline-table;
+  min-height: 200px;
+  list-style-type: none;
+  margin: auto;
+  padding: 5px 0 0 0;
+  width: 33%;
+}
+
+.connectedSortable li {
+  margin: 0 5px 5px 5px;
+  padding: 5px;
+  font-size: 1.2em;
+}
+
+.connectedSortable .section-title {
+  text-decoration: none;
+  border: none;
+  border-bottom: 1px solid #dadada;
+  font-weight: bold;
+  cursor: default;
+  width: 97%;
+}
+
+.connectedSortable .task-description {
+  text-decoration: none;
+  font-size: 11px;
+  color: #000;
+  text-align: justify;
+}
+
+.connectedSortable .task-executor {
+  text-decoration: none;
+  font-size: 12px;
+  color: #000;
+}
