@@ -72,4 +72,19 @@ public class TaskDAO {
 		
 	}
 	
+	public void setChangetFalse(){
+		
+		List<Task> tasks = getAllTasks();
+		
+		em.getTransaction().begin();
+		
+		for(Task t: tasks){
+			
+			if(t.isChanged())
+				t.setChanged(false);
+		}
+		
+		em.getTransaction().commit();
+	}
+	
 }
