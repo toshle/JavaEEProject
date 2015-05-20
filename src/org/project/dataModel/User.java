@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -24,16 +26,25 @@ public class User implements Serializable {
 	}
 	
 	@Id
+	@Size(min=4, max=32)
 	private String userName;
 	
+	@NotNull
+	@Size(min=4, max=257)
 	private String passwd;
-	private String fullName; // One field for family name and fathername
+	
+	@NotNull
+	@Size(min=4, max=64)
+	private String fullName; // One field for all names
+	
+	@NotNull
+	@Size(min=6, max=32)
 	private String email;
+	
 	private boolean isAdministrator;
 	
 //	@OneToMany(cascade=CascadeType.ALL)
 	private List<Task> tasks;
-	
 	
 	public User(String userName, String passwd, String fullName, String email,
 			boolean isAdministrator, List<Task> tasksWorkingOn) {

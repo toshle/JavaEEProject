@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -49,7 +50,7 @@ public class UserManager {
 		String userJson = gson.toJson(_user);
 		
 		if(_user == null){
-			return Response.status(Response.Status.NOT_FOUND).entity("User not found " + user).build();
+			return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
 		}else{
 			return Response.ok(userJson, MediaType.APPLICATION_JSON).build();
 		}
@@ -81,10 +82,17 @@ public class UserManager {
 		
 		UserDAO dao = new UserDAO(emf.createEntityManager());
 		
-		boolean success = dao.register(_user);
+		boolean success=false;
+		try{
+			success = dao.register(_user);
+			
+		}catch (ConstraintViolationException e) {
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Bad input").build();
+		}
 		
 		if(success){
-			return Response.ok("success").build();
+			return Response.ok(new Gson().toJson(_user),MediaType.APPLICATION_JSON).build();
 		}else{
 			return Response.status(Response.Status.CONFLICT).entity("user exists").build();
 		}
@@ -99,7 +107,5 @@ public class UserManager {
 		
 		return dao.getAllTasksUser(userName);
 	}
-	
-	
 	
 }

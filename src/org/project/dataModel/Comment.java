@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -25,11 +27,15 @@ public class Comment implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
+	@NotNull
+	@Size(min=1, max=256)
 	private String content;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar createdTime;
-	@OneToOne(cascade=CascadeType.ALL)
+	
+	//@OneToOne(cascade=CascadeType.ALL)
+	@NotNull
 	private User author;
 
 	public Comment(long id, String content, Calendar createdTime, User author) {
@@ -71,6 +77,5 @@ public class Comment implements Serializable {
 	public void setAuthor(User author) {
 		this.author = author;
 	}
-	
    
 }

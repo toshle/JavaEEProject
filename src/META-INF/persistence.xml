@@ -12,7 +12,7 @@
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
 		<properties>
-			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)" />
+			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)" /> <!-- ,SchemaAction='add,deleteTableContents' -->
 			<property name="openjpa.Log"
 				value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE" />
 			<property name="openjpa.ConnectionFactoryProperties" value="PrintParameters=true" />

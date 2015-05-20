@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 
 import org.project.dataModel.Comment;
 import org.project.dataModel.Task;
@@ -18,26 +20,18 @@ public class TaskDAO {
 		this.em = em;
 	}
 
-	public Task findByNameAndExecutor(String name, String executor) {
-
-		TypedQuery<Task> query = em
-				.createNamedQuery("findByNameExecutor", Task.class)
-				.setParameter("name", name).setParameter("executor", executor);
-
-		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
-
 	public void addTask(Task task) {
 		em.getTransaction().begin();
+		TypedQuery<Task> query = em
+						.createNamedQuery("findByNameDescription", Task.class)
+						.setParameter("name", task.getName()).setParameter("description", task.getDescription());
 		
-		Task found = findByNameAndExecutor(task.getName(), task.getExecutor());
-		if (found == null) {
+		List<Task> result = query.getResultList();
+		
+		if(result.isEmpty()){
 			em.persist(task);
 		}
+		
 		em.getTransaction().commit();
 	}
 

@@ -5,6 +5,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -14,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "findByNameExecutor", query = "SELECT b FROM Task b WHERE b.name = :name AND b.executor = :executor"),
+    @NamedQuery(name = "findByNameDescription", query = "SELECT b FROM Task b WHERE b.name = :name AND b.description = :description"),
     @NamedQuery(name = "getAllTasks", query = "SELECT b FROM Task b")
 })
 public class Task implements Serializable {
@@ -28,14 +31,20 @@ public class Task implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
+	@NotNull
+	@Size(min=2, max=64)
 	private String name;
+	
+	@NotNull
 	private String description;
 	
+	@Future
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar finalDate;
 	
 	private String status;
-//	@OneToOne(cascade=CascadeType.ALL)
+	
+	@Size(min=4, max=64)
 	private String executor;  
 	
 //	@OneToMany(cascade=CascadeType.ALL)
