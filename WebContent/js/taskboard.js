@@ -1,6 +1,8 @@
 $('document').ready(init);
 
 function init(){
+  document.getElementById('login').style.display = 'none';
+
   $("#todo, #inprogress, #done").sortable({
 
     items: "li:not(.section-title)",
@@ -41,7 +43,8 @@ function init(){
   });
 
   $("#login-link").bind("click", function(event) {
-    alert("Login ");
+    console.log('i log');
+    loginUtils.fadeIn();
 
     event.preventDefault();
   });
