@@ -43,16 +43,16 @@ public class TaskManager {
 
 	@POST
 	@Path("/Add")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes("application/json")
 	public Response addTask(Task task) {
-
+		
 		TaskDAO dao = new TaskDAO(emf.createEntityManager());
 
 		try {
 			dao.addTask(task);
 		} catch (ConstraintViolationException e) {
 			return Response.status(Response.Status.BAD_REQUEST)
-					.entity("Bad input").build();
+					.entity(e.getMessage()).build();
 		}
 		return Response.status(Response.Status.OK).build();
 	}
