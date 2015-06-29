@@ -46,6 +46,10 @@ form:after {
 {
 	-webkit-backface-visibility: hidden;
 	-webkit-transform: scale(1);
+	position: absolute;
+	margin: auto;
+	width: 100%;
+	height: 100%;
 }
 .container { margin: 25px auto; position: relative; width: 900px; }
 #content {

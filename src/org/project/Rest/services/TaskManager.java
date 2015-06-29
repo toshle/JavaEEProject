@@ -20,10 +20,6 @@ import org.project.dao.TaskDAO;
 import org.project.dataModel.Comment;
 import org.project.dataModel.Task;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 @Path("/Task")
 public class TaskManager {
 
