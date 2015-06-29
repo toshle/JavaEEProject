@@ -14,6 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.project.dao.TaskDAO;
 import org.project.dataModel.Comment;
 import org.project.dataModel.Task;
@@ -60,17 +62,25 @@ public class TaskManager {
 	@POST
 	@Path("/Update")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void changeStatus(String json) {
+	public Response changeStatus(String json) {
 
-		JsonElement element = new JsonParser().parse(json);
-		JsonObject object = element.getAsJsonObject();
+		//JsonElement element = new JsonParser().parse(json);
+		//JsonObject object = element.getAsJsonObject();
+		
+		JSONObject object;
+		try {
+			object = new JSONObject(json);
+			int id = object.getInt("id");
+			String status = object.getString("status");
+			TaskDAO dao = new TaskDAO(emf.createEntityManager());
 
-		String id = object.get("id").getAsString();
-		String status = object.get("status").getAsString();
+			dao.changeStatus(id, status);
+		} catch (JSONException e) {
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity(e.getMessage()).build();
+		}
 
-		TaskDAO dao = new TaskDAO(emf.createEntityManager());
-
-		dao.changeStatus(id, status);
+		return Response.status(Response.Status.OK).build();
 
 	}
 
@@ -86,8 +96,8 @@ public class TaskManager {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Bad input").build();
 		}
-		return Response.status(Response.Status.OK).build();
 
+		return Response.status(Response.Status.OK).build();
 	}
 
 }

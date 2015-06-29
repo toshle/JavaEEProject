@@ -39,9 +39,9 @@ public class TaskDAO {
 		return em.createNamedQuery("getAllTasks", Task.class).getResultList();
 	}
 
-	public void changeStatus(String id,String status){
+	public void changeStatus(int id,String status){
 		
-		Task update = em.find(Task.class,Integer.parseInt(id));
+		Task update = em.find(Task.class, id);
 		if(update == null)
 			return;
 		

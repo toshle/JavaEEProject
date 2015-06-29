@@ -27,13 +27,19 @@ function reloadTasks() {
 						+ "\" href=\"#\">"
 						+ task["name"]
 						+ "</a>"
-						+ "<p class=\"task-description\">"
+						+ "<p data-id=\""
+						+ task["id"]
+						+ "\" class=\"task-description\">"
 						+ task["description"]
 						+ "</p>"
-						+ "<p class=\"task-executor\">"
+						+ "<p data-id=\""
+						+ task["id"]
+						+ "\" class=\"task-executor\">"
 						+ "  Deadline: "
 						+ task["finalDate"]
-						+ "  | Executor: <a class=\"username-link\" href=\"#\">"
+						+ "  | Executor: <a data-id=\""
+						+ task["id"]
+						+ "\" class=\"username-link\" href=\"#\">"
 						+ task["executor"] + "</a>"
 						+ "</p>" + "</li>"
 				);
@@ -51,35 +57,10 @@ function reloadTasks() {
 	});
 }
 
-function init() {
-	document.getElementById('login').style.display = 'none';
-
-	reloadTasks();
-
-	$("#todo, #inprogress, #done").sortable({
-
-		items : "li:not(.section-title)",
-
-		connectWith : ".connectedSortable",
-
-		receive : function(event, ui) {
-			console.log(event.target.getAttribute("id"));
-			console.log(event.originalEvent.target.dataset["id"]);
-		}
-
-	}).disableSelection();
-
-	$(document).on("click", ".task-title", function(event) {
-		console.log(event.originalEvent);
-		alert("Task " + event.originalEvent.target.dataset["id"]);
-
-		event.preventDefault();
-	});
-
-	$(document).on("click", "#add-task-link", function(event) {
-		alert("Add new task " + event);
-
-		var dummy = {
+function addTask(form) {
+	var task = {};
+	
+	var dummy = {
 			"task" : {
 				"name" : "Dummy task1",
 				"description" : "Dummy description",
@@ -91,27 +72,123 @@ function init() {
 				"isChanged" : false
 			}
 		};
-		console.log("dummy", JSON.stringify(dummy));
+    
+    $.each(form.elements, function(i, v) {
+      var input = $(v);
+      var val = input.val();
+      task[input.attr("name")] = val;
+      delete task["submit"];
+      delete task["undefined"];
+    });
+    
+    task["status"] = "todo";
+    task["isChanged"] = false;
+    task["isImportant"] = false;
+    task["comments"] = [];
+    
+    var data = {"task": task};
 
-		$.ajax({
-			headers : {
-				'Accept' : 'application/json',
-				'Content-Type' : 'application/json'
+	console.log("task", JSON.stringify(task));
+    $.ajax({
+		headers : {
+			'Accept' : 'application/json',
+			'Content-Type' : 'application/json'
+		},
+		processData : false,
+		cache : false,
+		url : "rest/Task/Add",
+		type : "POST",
+		dataType : "text",
+		data : JSON.stringify(data)
+	}).done(function(data, status, jqXHR) {
+		console.log("Done", jqXHR);
+	}).fail(function(jqXHR, status, error) {
+		console.log(jqXHR);
+		console.log("Fail", jqXHR.responseText);
+	});
+    
+	reloadTasks();
+}
+
+function init() {
+	document.getElementById('login').style.display = 'none';
+	var dialog, form;
+	reloadTasks();
+
+	$("#todo, #inprogress, #done").sortable({
+
+		items : "li:not(.section-title)",
+
+		connectWith : ".connectedSortable",
+
+		receive : function(event, ui) {
+
+			console.log(event.target.getAttribute("id"));
+			console.log(event.originalEvent.target.dataset["id"]);
+			var data = {
+				"id" : event.originalEvent.target.dataset["id"],
+				"status" : event.target.getAttribute("id")
+			};
+			$.ajax({
+				headers : {
+					'Accept' : 'application/json',
+					'Content-Type' : 'application/json'
+				},
+				processData : false,
+				cache : false,
+				url : "rest/Task/Update",
+				type : "POST",
+				dataType : "text",
+				data : JSON.stringify(data)
+			}).done(function(data, status, jqXHR) {
+				console.log("Done", jqXHR);
+			}).fail(function(jqXHR, status, error) {
+				console.log(jqXHR);
+				console.log("Fail", jqXHR.responseText);
+			});
+		}
+
+	}).disableSelection();
+
+	$(document).on("click", ".task-title", function(event) {
+		console.log(event.originalEvent);
+		alert("Task " + event.originalEvent.target.dataset["id"]);
+
+		event.preventDefault();
+	});
+	
+
+	dialog = $("#dialog-task-form").dialog({
+		autoOpen : false,
+		height : 300,
+		width : 450,
+		modal : true,
+		buttons : {
+			"Add task" : function() {
+				addTask(form[0]);
 			},
-			processData : false,
-			cache : false,
-			url : "rest/Task/Add",
-			type : "POST",
-			dataType : "text",
-			data : JSON.stringify(dummy),
-		}).done(function(data, status, jqXHR) {
-			console.log("Done", jqXHR);
-		}).fail(function(jqXHR, status, error) {
-			console.log(jqXHR);
-			console.log("Fail", jqXHR.responseText);
-		});
-
-		reloadTasks();
+			Cancel : function() {
+				dialog.dialog("close");
+			}
+		},
+		close : function() {
+			form[0].reset();
+		}
+	});
+	
+	$( "#finalDate" ).datepicker({
+		dateFormat: "yy-mm-ddT00:00:00.000+03:00"
+	});
+	
+	
+	form = dialog.find("form").on("submit", function(event) {
+		event.preventDefault();
+		addTask(this);
+	});
+	
+	$(document).on("click", "#add-task-link", function(event) {
+		dialog.dialog( "open" );
+		
 		event.preventDefault();
 	});
 
