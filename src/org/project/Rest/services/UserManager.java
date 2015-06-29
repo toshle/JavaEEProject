@@ -1,6 +1,7 @@
 package org.project.Rest.services;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.validation.ConstraintViolationException;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,6 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.openjpa.json.JSONObject;
 import org.project.dao.UserDAO;
 import org.project.dataModel.Task;
 import org.project.dataModel.User;
@@ -23,6 +26,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.org.apache.xerces.internal.util.Status;
+
 
 @Path("/User")
 public class UserManager {
@@ -33,70 +38,61 @@ public class UserManager {
 	public UserManager() {
 	}
 	
-	@Path("/Login")
 	@POST
-	public Response login(String json){
-		
-		JsonElement element =  new JsonParser().parse(json);
-		JsonObject object = element.getAsJsonObject();
-		
-		String user = object.get("user").getAsString();
-		String passwd = object.get("passwd").getAsString();
+	@Path("/Login")
+	@Consumes("application/json")
+	public Response login(User user){
+		String userName = user.getUserName();
+		String passwd = user.getPasswd();
 
-		UserDAO dao = new UserDAO(emf.createEntityManager());
+		System.out.println("logging in with user: " + userName + " and password: " + passwd);
 		
-		User _user = dao.login(user,passwd);
-		Gson gson = new Gson();
-		String userJson = gson.toJson(_user);
-		
-		if(_user == null){
-			return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
-		}else{
-			return Response.ok(userJson, MediaType.APPLICATION_JSON).build();
+		UserDAO userDao = new UserDAO(emf.createEntityManager());
+
+		int authenticationResult = userDao.login(userName, passwd);
+		switch (authenticationResult) {
+		case -1:
+			return Response.status(Response.Status.NOT_FOUND).entity("User not found.").build();			
+		case 0:
+			return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid password.").build();			
+		default:
+			return Response.ok("Logged in.", MediaType.APPLICATION_JSON).build();
 		}
 	}
 	
-	@Path("/Register")
 	@POST
-	public Response register(String user){
-		
-		JsonElement element =  new JsonParser().parse(user);
-		JsonObject object = element.getAsJsonObject();
-		
-		User _user = new User();
-		
-		_user.setAdministrator(object.get("isAdministrator").getAsBoolean());
-		_user.setEmail(object.get("email").getAsString());
-		_user.setFullName(object.get("fullName").getAsString()); // append name and family in javascript
-		_user.setUserName(object.get("userName").getAsString());
-		
-		byte[] hash=null;
+	@Path("/Register")
+	@Consumes("application/json")
+	public Response register(User user){
+		String userPassword = user.getPasswd();
+		String hashedPassword = "";
 		try {
-			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			hash = digest.digest(object.get("passwd").getAsString().getBytes("UTF-8"));
-			
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			MessageDigest digest = MessageDigest.getInstance("MD5");
+			digest.update(userPassword.getBytes(), 0, userPassword.length());
+			hashedPassword = new BigInteger(1, digest.digest()).toString(16);
+		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		_user.setPasswd(hash.toString());
+		
+		System.out.println("REGISTERING WITH PASSWORD " + user.getPasswd());
+		
+		user.setPasswd(hashedPassword);
 		
 		UserDAO dao = new UserDAO(emf.createEntityManager());
 		
-		boolean success=false;
-		try{
-			success = dao.register(_user);
-			
-		}catch (ConstraintViolationException e) {
-			return Response.status(Response.Status.BAD_REQUEST)
-					.entity("Bad input").build();
+		boolean userCreated = false;
+		try {
+			userCreated = dao.register(user);
+		} catch (ConstraintViolationException e) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("Bad input").build();
 		}
 		
-		if(success){
-			return Response.ok(new Gson().toJson(_user),MediaType.APPLICATION_JSON).build();
-		}else{
-			return Response.status(Response.Status.CONFLICT).entity("user exists").build();
+		if (userCreated) {
+			return Response.ok("Registered." ,MediaType.APPLICATION_JSON).build();
 		}
-		
+		else {
+			return Response.status(Response.Status.CONFLICT).entity("User already exists.").build();
+		}
 	}
 	
 	@Path("/AllTasks/{user}")

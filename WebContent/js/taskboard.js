@@ -112,6 +112,8 @@ function addTask(form) {
 
 function init() {
 	document.getElementById('login').style.display = 'none';
+	document.getElementById('register').style.display = 'none';
+	
 	var dialog, form;
 	reloadTasks();
 
@@ -188,7 +190,25 @@ function init() {
 	
 	$(document).on("click", "#add-task-link", function(event) {
 		dialog.dialog( "open" );
-		
+		$.ajax({
+			headers : {
+				'Accept' : 'application/json',
+				'Content-Type' : 'application/json'
+			},
+			processData : false,
+			cache : false,
+			type : "POST",
+			dataType : "text",
+			data : JSON.stringify(dummy),
+			url : "rest/Task/Add",
+		}).done(function(data, status, jqXHR) {
+			console.log("Done", jqXHR);
+		}).fail(function(jqXHR, status, error) {
+			console.log(jqXHR);
+			console.log("Fail", jqXHR.responseText);
+		});
+
+		reloadTasks();
 		event.preventDefault();
 	});
 
@@ -206,14 +226,13 @@ function init() {
 	});
 
 	$(document).on("click", "#login-link", function(event) {
-		console.log('i log');
-		loginUtils.fadeIn();
+		loginUtils.fadeIn('login');
 
 		event.preventDefault();
 	});
 
 	$(document).on("click", "#register-link", function(event) {
-		alert("Register ");
+		loginUtils.fadeIn('register')
 
 		event.preventDefault();
 	});

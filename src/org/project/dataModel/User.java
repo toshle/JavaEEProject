@@ -22,23 +22,22 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public User() {
-		super();
 	}
 	
+//	@Size(min=4, max=32)
 	@Id
-	@Size(min=4, max=32)
 	private String userName;
 	
+//	@Size(min=4, max=257)
 	@NotNull
-	@Size(min=4, max=257)
 	private String passwd;
 	
+//	@Size(min=4, max=64)
 	@NotNull
-	@Size(min=4, max=64)
 	private String fullName; // One field for all names
 	
+//	@Size(min=6, max=32)
 	@NotNull
-	@Size(min=6, max=32)
 	private String email;
 	
 	private boolean isAdministrator;
