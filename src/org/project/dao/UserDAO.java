@@ -1,14 +1,17 @@
 package org.project.dao;
 
-import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.ws.rs.core.Response;
 
 import org.project.dataModel.Task;
 import org.project.dataModel.User;
+
+import com.sun.org.apache.xerces.internal.util.Status;
 
 public class UserDAO {
 
@@ -56,40 +59,41 @@ public class UserDAO {
 			return false;
 	}
 
-	public User login(String user,String passwd){
-		 
-		byte[] hash=null;
+	public int login(String user, String passwd){
+		
+		String hashedPassword = "";
 		try {
-			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			hash = digest.digest(passwd.getBytes("UTF-8"));
-			
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			MessageDigest digest = MessageDigest.getInstance("MD5");
+			digest.update(passwd.getBytes(), 0, passwd.length());
+			hashedPassword = new BigInteger(1, digest.digest()).toString(16);
+		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
 		
 		User _user = em.find(User.class,user);
+		if(_user == null) return -1; //Status.NOT_RECOGNIZED;
 		
-		if(_user.getPasswd() == hash.toString()){
-			return _user;
-		}else
-			return null;
-		
+		if (_user.getPasswd().equals(hashedPassword)) {
+			return 1; //Status.RECOGNIZED;
+		}
+		else {
+			return 0; // Status.NOT_ALLOWED;
+		}
 	}
 	
 	public boolean register(User user){
-		
 		User exists = em.find(User.class, user.getUserName());
 		
-		if(exists != null){
+		if (exists != null) {
 			return false;
-		}else{
+		}
+		else {
 			em.getTransaction().begin();
 			em.persist(user);
 			em.getTransaction().commit();
 			
 			return true;
 		}
-		
 	}
 
 	

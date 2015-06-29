@@ -23,13 +23,33 @@
 			  <div class="container">
 					<section id="content">
 						<form action="#">
-							<h1>Login or Register</h1>
+							<h1>Log in</h1>
 							<div> <input type="email" placeholder="E-mail" required id="email" autocomplete="off" /> </div> 
 							<div> <input type="password" placeholder="Password" required id="password" /> </div>
 							<div> <p id="exceptionText"> &nbsp; </p> </div>
               <div> <p id="exceptionText"> &nbsp; </p> </div>
-							<div> <button type="button" onclick="loginUtils.registerUser()" > Continue </button> </div>
-              <div> <button type="button" onclick="loginUtils.fadeOut()" > Close </button> </div>
+							<div> <button type="button" onclick="loginUtils.loginOrRegister('login')" > Log in </button> </div>
+              <div> <button type="button" onclick="loginUtils.fadeOut('login')" > Close </button> </div>
+						</form>
+					</section>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Register form-->
+    <div id="register" style="position: absolute; left: 40%; top: 50%;">
+    	<div style="position: relative; left: -33%; top: -23vh;">
+			  <div class="container">
+					<section id="content">
+						<form action="#">
+							<h1>Register</h1>
+							<div> <input type="email" placeholder="E-mail" required id="remail" autocomplete="off" /> </div>
+							<div> <input type="password" placeholder="Password" required id="rpassword" /> </div>
+							<div> <input type="text" placeholder="Fullname" required id="rfullname" autocomplete="off" /> </div>
+							<div> <p id="registerText"> &nbsp; </p> </div>
+              <div> <p id="registerText"> &nbsp; </p> </div>
+							<div> <button type="button" onclick="loginUtils.loginOrRegister('register')" > Register </button> </div>
+              <div> <button type="button" onclick="loginUtils.fadeOut('register')" > Close </button> </div>
 						</form>
 					</section>
         </div>
@@ -45,10 +65,11 @@
         <li>
           <a id="login-link" href="#">Login</a>
         </li>
-        <!-- <li>
+        <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+        <li>
           <a id="register-link" href="#">Register</a>
         </li>
-        <li>
+        <!-- <li>
           <a id="logout-link" href="#">Logout</a>
         </li> -->
       </ul>
