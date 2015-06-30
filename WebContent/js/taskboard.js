@@ -1,5 +1,6 @@
 $('document').ready(init);
-var tasks = null;
+var tasks = [];
+var users = [];
 function reloadTasks() {
 	$("#todo, #inprogress, #done").html("");
 	if ($("#todo, #inprogress, #done").is(':empty')){
@@ -56,6 +57,35 @@ function reloadTasks() {
 	});
 }
 
+function getAllUsers() {
+	$.ajax({
+		accept : 'application/json',
+		dataType : 'text',
+		success : function(data, textStatus, xhr) {
+			users = [];
+			$.each(JSON.parse(data)['user'], function(index, user) {
+				users.push({
+					"userName": user["userName"],
+					"fullName": user["fullName"]
+					});
+			}); 
+			console.log(users);
+			
+			$( "#executor-input" ).autocomplete({
+			      source: users.map(function(user) { return user["fullName"] })
+			});
+		},
+		error : function(xhr, textStatus, errorThrown) {
+			console.log("Error.");
+			console.log(xhr);
+		},
+		type : 'GET',
+		url : "rest/User/AllUsers"
+	});
+	
+	
+}
+
 function addTask(form) {
 	var task = {};
 	
@@ -84,6 +114,12 @@ function addTask(form) {
     task["isChanged"] = false;
     task["isImportant"] = false;
     task["comments"] = [];
+    for (var i = 0; i < tasks.length; i++) {
+        if (users[i]["fullName"] == task["executor"]) {
+        	task["executor"] = users[i]["userName"];
+        	break;
+        }  
+    }
     
     var data = {"task": task};
 
@@ -100,13 +136,13 @@ function addTask(form) {
 		dataType : "text",
 		data : JSON.stringify(data)
 	}).done(function(data, status, jqXHR) {
+		reloadTasks();
 		console.log("Done", jqXHR);
 	}).fail(function(jqXHR, status, error) {
 		console.log(jqXHR);
 		console.log("Fail", jqXHR.responseText);
 	});
     
-	reloadTasks();
 }
 
 function retrieveTaskDetails(id) {
@@ -137,10 +173,40 @@ function retrieveTaskDetails(id) {
 	
 }
 
+function retrieveUserTasks(userName) {
+	$.ajax({
+		accept : 'application/json',
+		dataType : 'text',
+		success : function(data, textStatus, xhr) {
+			console.log(data);
+			userTasks = JSON.parse(data)['user'];
+			console.log(tasks);
+			
+			$.each(userTasks, function(index, task) {
+				
+				$("#user-details").append(
+						""
+				);
+
+			});
+			
+			
+		},
+		error : function(xhr, textStatus, errorThrown) {
+			console.log("Error.");
+			console.log(xhr);
+		},
+		type : 'GET',
+		url : "rest/User/AllTasks/" + userName
+	});
+	
+}
+
 function init() {
 	document.getElementById('login').style.display = 'none';
 	document.getElementById('register').style.display = 'none';
 	
+	getAllUsers();
 	var dialog, form;
 	reloadTasks();
 	
@@ -152,6 +218,18 @@ function init() {
 		buttons : {
 			"Close" : function() {
 				taskDialog.dialog("close");
+			}
+		}
+	});
+	
+	var userDialog = $("#user-details").dialog({
+		autoOpen : false,
+		height : 300,
+		width : 450,
+		modal : true,
+		buttons : {
+			"Close" : function() {
+				userDialog.dialog("close");
 			}
 		}
 	});
@@ -236,15 +314,16 @@ function init() {
 	});
 
 	$(document).on("click", ".username-link", function(event) {
-		console.log(event.originalEvent);
-		alert("Username " + event.originalEvent.target.text);
+		console.log(event.originalEvent.target.innerText);
+		retrieveUserTasks(event.originalEvent.target.innerText);
+		userDialog.dialog("open");
 
 		event.preventDefault();
 	});
 
 	$(document).on("click", "#logout-link", function(event) {
 		alert("Logout ");
-
+		
 		event.preventDefault();
 	});
 

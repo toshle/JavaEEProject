@@ -37,10 +37,10 @@ public class UserDAO {
 	}
 
 	// ako ima dve ili poveche zadachi v status inproces ili v nachalen status vrushta flagche za ui-q
-	public boolean assignTask(String id, String user) {
+	public boolean assignTask(long id, String user) {
 
 		User _user = em.find(User.class, user);
-		Task task = em.find(Task.class,Integer.parseInt(id));
+		Task task = em.find(Task.class, id);
 		
 		if (_user == null)
 			return false;

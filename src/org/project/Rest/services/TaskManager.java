@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.project.dao.TaskDAO;
+import org.project.dao.UserDAO;
 import org.project.dataModel.Comment;
 import org.project.dataModel.Task;
 
@@ -52,6 +53,11 @@ public class TaskManager {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity(e.getMessage()).build();
 		}
+
+		UserDAO userdao = new UserDAO(emf.createEntityManager());
+		userdao.assignTask(task.getId(), task.getExecutor());
+		
+		
 		return Response.status(Response.Status.OK).build();
 	}
 
