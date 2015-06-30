@@ -16,25 +16,26 @@
 		<script type="text/javascript" src="js/loginUtils.js"></script>
     
   </head>
-  <body>
+  <body>    
     <!-- Login form-->
     <div id="login" style="position: absolute; left: 40%; top: 50%;">
     	<div style="position: relative; left: -33%; top: -23vh;">
 			  <div class="container">
 					<section id="content">
 						<form action="#">
-							<h1>Log in</h1>
+							<h1>Login or Register</h1>
 							<div> <input type="email" placeholder="E-mail" required id="email" autocomplete="off" /> </div> 
 							<div> <input type="password" placeholder="Password" required id="password" /> </div>
 							<div> <p id="exceptionText"> &nbsp; </p> </div>
               <div> <p id="exceptionText"> &nbsp; </p> </div>
-							<div> <button type="button" onclick="loginUtils.loginOrRegister('login')" > Log in </button> </div>
+							<div> <button type="button" onclick="loginUtils.loginOrRegister('login')" > Continue </button> </div>
               <div> <button type="button" onclick="loginUtils.fadeOut('login')" > Close </button> </div>
 						</form>
 					</section>
         </div>
       </div>
     </div>
+    
     
     <!-- Register form-->
     <div id="register" style="position: absolute; left: 40%; top: 50%;">
@@ -58,20 +59,21 @@
     
     <div id="user-line">
       <div id="user-info">
-        Hello, <a class="username-link" data-id="1" href="#">Rosen Rachev</a>
+        <!-- Hello, <a class="username-link" data-id="1" href="#">Guest</a> -->
+        Hello, guest!
       </div>
 
       <ul id="menu">
-        <li>
+        <li id="loginLi">
           <a id="login-link" href="#">Login</a>
         </li>
-        <li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
-        <li>
+        <li id= "separatorLi">&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+        <li id="registerLi">
           <a id="register-link" href="#">Register</a>
         </li>
-        <!-- <li>
+        <li id="logoutLi" style="visibility: hidden;">
           <a id="logout-link" href="#">Logout</a>
-        </li> -->
+        </li>
       </ul>
     </div>
     <div id="dialog-task-form" title="Add task">

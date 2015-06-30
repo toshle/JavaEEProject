@@ -46,14 +46,19 @@ public class UserManager {
 		
 		UserDAO userDao = new UserDAO(emf.createEntityManager());
 
-		int authenticationResult = userDao.login(userName, passwd);
+		int authenticationResult = userDao.checkUser(userName, passwd);
 		switch (authenticationResult) {
 		case -1:
 			return Response.status(Response.Status.NOT_FOUND).entity("User not found.").build();			
 		case 0:
 			return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid password.").build();			
 		default:
-			return Response.ok("Logged in.", MediaType.APPLICATION_JSON).build();
+			User loggedUser = userDao.getUser(userName);
+			user.setFullName(loggedUser.getFullName());
+			user.setEmail(loggedUser.getEmail());
+			user.setAdministrator(loggedUser.isAdministrator());
+			user.setTasks(loggedUser.getTasks());
+			return Response.ok("Logged in.", MediaType.APPLICATION_JSON).entity(user).build();
 		}
 	}
 	
