@@ -59,7 +59,13 @@ public class UserDAO {
 			return false;
 	}
 
-	public int login(String user, String passwd){
+	public User getUser(String user) {		
+		User found = em.find(User.class, user);
+		System.out.println(found.getFullName());
+		return found;
+	}
+	
+	public int checkUser(String user, String passwd){
 		
 		String hashedPassword = "";
 		try {
@@ -70,7 +76,7 @@ public class UserDAO {
 			e.printStackTrace();
 		}
 		
-		User _user = em.find(User.class,user);
+		User _user = em.find(User.class, user);
 		if(_user == null) return -1; //Status.NOT_RECOGNIZED;
 		
 		if (_user.getPasswd().equals(hashedPassword)) {

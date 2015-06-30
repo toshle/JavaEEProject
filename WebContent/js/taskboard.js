@@ -220,7 +220,7 @@ function init() {
 	});
 
 	$(document).on("click", "#logout-link", function(event) {
-		alert("Logout ");
+		location.reload();
 
 		event.preventDefault();
 	});

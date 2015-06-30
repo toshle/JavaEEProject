@@ -82,7 +82,27 @@ var loginUtils = {
 	        
 
 		}).done(function(data, status, jqXHR) {
-			loginUtils.loginAndFadeOut(textID, jqXHR.responseText);
+			if (loginOrRegisterService === 'Login')
+			{
+				if (jqXHR.status === 200) {
+					loginUtils.loginAndFadeOut(textID, 'Logged in.');
+					
+					var loggedUser = JSON.parse(jqXHR.responseText).user;
+					console.log(loggedUser.email);
+					console.log('Logged in with ' + JSON.stringify(loggedUser));
+					// Do something with the logged user.
+					var helloUserElement = document.getElementById('user-info'); 
+					helloUserElement.innerHTML = 
+						'Hello, <a class="username-link" data-id="1" href="#"> ' + loggedUser.fullName + '!</a>';
+					
+					document.getElementById('logoutLi').style.visibility = 'visible';
+					document.getElementById('loginLi').style.visibility = 'hidden';
+					document.getElementById('separatorLi').style.visibility = 'hidden';
+					document.getElementById('registerLi').style.visibility = 'hidden';
+				}
+				else loginUtils.loginAndFadeOut(textID, jqXHR.responseText);
+			}
+			else loginUtils.loginAndFadeOut(textID, jqXHR.responseText);
 		}).fail(function(jqXHR, status, error) {
 			loginUtils.loginAndFadeOut(textID, jqXHR.responseText);
 		});
@@ -119,12 +139,12 @@ var loginUtils = {
 	      }
 	      else {
 	    	  if(fullname !== 'dummy') {
-		    	  if (password.length <= 6) {
-		    		  exceptionMessage = 'Please enter password longer than 6 letters';
+		    	  if (password.length < 6) {
+		    		  exceptionMessage = 'Password should be at least 6 letters';
 		    		  this.loginAndFadeOut(textID, exceptionMessage);
 		    	  }
-		    	  else if (fullname.length <= 6) {
-		    		  exceptionMessage = 'Please enter fullname longer than 6 letters';
+		    	  else if (fullname.length < 6) {
+		    		  exceptionMessage = 'Fullname should be at least 6 letters';
 		    		  this.loginAndFadeOut(textID, exceptionMessage);
 		    	  } else {
 		    		  this.executeQuery(userInfo, textID);
