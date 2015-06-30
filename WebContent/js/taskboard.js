@@ -1,7 +1,6 @@
 $('document').ready(init);
-
+var tasks = null;
 function reloadTasks() {
-	var tasks = null;
 	$("#todo, #inprogress, #done").html("");
 	if ($("#todo, #inprogress, #done").is(':empty')){
 		$("#todo").html("<li class=\"section-title\">Todo <a id=\"add-task-link\" href=\"#\">+</a></li>");
@@ -110,12 +109,52 @@ function addTask(form) {
 	reloadTasks();
 }
 
+function retrieveTaskDetails(id) {
+	var task = null;
+	for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i]["id"] == id) {
+        	task = tasks[i];
+        	break;
+        }  
+    }
+	
+	var html = "<p>" + task["name"] + "</p><hr />" 
+			   + "<p>" + task["description"] + "</p><br>"
+			   + "<p>Executor: " + task["executor"] + "</p><br>"
+			   + "<p>Final date: " + task["finalDate"] + "</p><br>";
+	if(task["comments"] != undefined) {
+		html += "<p>Comments</p><hr />";
+		html += "<div id=\"comments\">";
+		$.each(task["comments"], function(index, comment) {
+			html += comment["author"] + ": " + comment["content"];
+		});
+		html += "</div>";
+	}
+	
+			   
+	
+	$("#task-details").html(html);
+	
+}
+
 function init() {
 	document.getElementById('login').style.display = 'none';
 	document.getElementById('register').style.display = 'none';
 	
 	var dialog, form;
 	reloadTasks();
+	
+	var taskDialog = $("#task-details").dialog({
+		autoOpen : false,
+		height : 300,
+		width : 450,
+		modal : true,
+		buttons : {
+			"Close" : function() {
+				taskDialog.dialog("close");
+			}
+		}
+	});
 
 	$("#todo, #inprogress, #done").sortable({
 
@@ -154,10 +193,12 @@ function init() {
 
 	$(document).on("click", ".task-title", function(event) {
 		console.log(event.originalEvent);
-		alert("Task " + event.originalEvent.target.dataset["id"]);
-
+		retrieveTaskDetails(event.originalEvent.target.dataset["id"]);
+		taskDialog.dialog( "open" );
 		event.preventDefault();
 	});
+	
+	
 	
 
 	dialog = $("#dialog-task-form").dialog({
