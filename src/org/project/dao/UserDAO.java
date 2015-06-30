@@ -31,6 +31,10 @@ public class UserDAO {
 			em.getTransaction().commit();
 		}
 	}
+	
+	public List<User> getAllUsers() {
+		return em.createNamedQuery("getAllUsers", User.class).getResultList();
+	}
 
 	// ako ima dve ili poveche zadachi v status inproces ili v nachalen status vrushta flagche za ui-q
 	public boolean assignTask(String id, String user) {

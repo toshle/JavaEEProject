@@ -22,10 +22,6 @@ import org.project.dao.UserDAO;
 import org.project.dataModel.Task;
 import org.project.dataModel.User;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.sun.org.apache.xerces.internal.util.Status;
 
 
@@ -107,6 +103,15 @@ public class UserManager {
 		UserDAO dao = new UserDAO(emf.createEntityManager());
 		
 		return dao.getAllTasksUser(userName);
+	}
+	
+	@Path("/AllUsers")
+	@GET
+	public List<User> getAllUsers(){
+		
+		UserDAO dao = new UserDAO(emf.createEntityManager());
+		
+		return dao.getAllUsers();
 	}
 	
 }
